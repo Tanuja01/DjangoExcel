@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} Hydro Revenue {% endblock %}
+{% load utils %}
+{% block content %}
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  	<script src="{% static 'js/blob' %}"></script>
+	<script src="{% static 'js/fileSaver.js' %}"></script>
+	
+    
+
+<script type="text/javascript">
+
+$(document).ready(function(){ 
+	$("#btnExport").click(function () {   
+	
+		var blob = new Blob([document.getElementById('table_data').innerHTML], {
+        		type: "application/vnd.ms-excel" });
+			saveAs(blob, "Hydro-Report.xls");
+
+	});		
+
+});
+
+</script>  
+<div class="container-fluid" style="padding-top: 1%">
+	<button class="btn btn-info" id="btnExport">
+          <span class="glyphicon glyphicon-export"></span> Export
+    </button>
+     <br>
+
+	<div style="padding-top: 1%" id='table_data'>
+		<table id="1" border="1" class="table-report">
+			<tr>
+				<td colspan="5" class="td-th"><b>{{hydro_general.company_name|capfirst}}</b></td>
+				
+			</tr>
+			
+			<tr>
+				<td colspan="5" class="td-th"><b>{{hydro_general.factory_name|capfirst}}</b></td>
+				
+			</tr>
+
+			<tr>
+					<td  colspan="5" class="td-th"><b>BÁO CÁO THỦY VĂN</b></td>
+			</tr>	
+			<tr>
+				<td colspan="5" class="td-th"><b> THÔNG TIN CHUNG </b></td>
+			</tr>
+			<tr>
+				<td class="td-th"> </td>
+				<td class="td-th"></td>
+				<td class="td-th"></td>
+			</tr>
+	
+		</table>
+
+		<table border="1"  id="report" class="table-report" >
+		 	<thead > 
+		 		<tr style="background-color:#ff8000;"> 
+		 			<th class="td-th"> Chỉ tiêu </th> 
+		 			<th class="td-th"> MN DBT </th>
+		 			<th class="td-th"> MNC </th>
+		 			<th class="td-th"> Q<sub>0</sub> </th>
+		 			<th class="td-th"> Q<sub>(max)</sub> </th>
+		 			<th class="td-th"> W<sub>tb</sub> </th>
+		 			<th class="td-th"> W<sub>hi</sub> </th>
+		 			<th class="td-th"> W<sub>c</sub> </th>
+		 		</tr>
+
+		 	</thead> 
+		 	<tbody> 
+
+		 		<tr style="background-color:#DCDCDC;">
+		 			<td class="unit td-th" ></td> 
+		 			<td class="unit td-th">(m)</td> 
+		 			<td class="unit td-th">(m)</td> 
+		 			<td class="unit td-th">(m<sup>3</sup>/s)</td>
+		 			<td class="unit td-th">(m<sup>3</sup>/s)</td>
+		 			<td class="unit td-th">(10<sup>6</sup>m<sub>3</sub>)</td>
+		 			<td class="unit td-th">(10<sup>6</sup>m<sub>3</sub>)</td>
+		 			<td class="unit td-th">(10<sup>6</sup>m<sub>3</sub>)</td>
+		 			
+		 		</tr>
+		 		<tr>
+		 			<td class="td-th"> Giá trị </td>
+		 			<td class="td-th">{{hydro_general.mn_dbt|floatformat:2|intcomma}}</td> 
+		 			<td class="td-th"> {{hydro_general.mnc|floatformat:2|intcomma}}</td> 
+		 			<td class="td-th">{{hydro_general.q0|floatformat:2|intcomma}}</td> 
+		 			<td class="td-th">{{hydro_general.qmax|floatformat:2|intcomma}}</td>
+		 			<td class="td-th">{{hydro_general.wtb|floatformat:3|intcomma}}</td>
+		 			<td class="td-th">{{hydro_general.whi|floatformat:3|intcomma}}</td>
+		 			<td class="td-th">{{hydro_general.wc|floatformat:3|intcomma}}</td>
+			 			
+		 		</tr>
+		 	</tbody>
+		 </table>
+
+		 <table  border="1"  id="3" class="table-report">
+		 	<tr>
+		 		<td class="td-th">THÔNG TIN THỦY VĂN</td>
+		 	</tr>
+		 </table>
+
+
+	<table border="1" class="table-report" id="data"> 
+		<thead > 
+			<tr style="background-color:#ff8000;"> 
+				<th rowspan="2" class="td-th">Chỉ tiêu</th> 
+				<th colspan="2" class="td-th">Mực nước</th> 
+				<th colspan="4" class="td-th">Lưu lượng TB</th> 
+				<th rowspan="2" class="td-th">Whi</th> 
+			</tr>
+			<tr style="background-color:#ff8000;">
+				<th class="td-th">Thượng lưu</th> 
+				<th class="td-th">Hạ lưu</th> 
+				<th class="td-th">Về hồ</th> 
+				<th class="td-th">Xả qua tổ máy</th> 
+				<th class="td-th">Xả qua tràn</th> 
+				<th class="td-th">Xả tối thiểu</th>
+			</tr> 
+		</thead> 
+		<tbody> 
+			<tr style="background-color:#DCDCDC;">
+		 			<td class="unit td-th" ></td> 
+		 			<td class="unit td-th">(m)</td> 
+		 			<td class="unit td-th">(m)</td> 
+		 			<td class="unit td-th">(m<sup>3</sup>/s)</td>
+		 			<td class="unit td-th">(m<sup>3</sup>/s)</td>
+		 			<td class="unit td-th">10<sup>6</sup>m<sub>3</sub>)</td>
+		 			<td class="unit td-th">(10<sup>6</sup>m<sub>3</sub>)</td>
+		 			<td class="unit td-th">(10<sup>6</sup>m<sub>3</sub>)</td>
+		 			
+		 	</tr>
+		 	<tr>
+			{% for row in day_data %}
+				<tr>
+				{% for key,value in row.items %}
+					
+						{% if key == 'target' %}
+							
+							{% if value|date:"SHORT_DATE_FORMAT" == ''  and value|date:"H:i" == '' %}
+							<td class=" td-th" style="background-color: #32CD32;">
+								{{value}}
+							
+
+							{% elif value|date:"SHORT_DATE_FORMAT" == '' %}
+							<td class="td-th" >
+								{{value|date:"H:i"}}
+							
+							{% else %}
+							<td class="td-th" >
+								{{value|date:"SHORT_DATE_FORMAT"}} 							
+							{% endif %}
+
+						{% elif value|get_type == 'int' or value|get_type == 'float' %}
+							<td class="number_align ">
+							{{value|floatformat:1|intcomma}}
+							
+						{% else %}
+							<td class="number_align">
+							{{value}}
+							
+						{% endif %}
+						</td>
+						{% endfor %}
+				</tr>
+			{% endfor %}
+		 		
+
+		</tbody>
+
+	</table>
+</div>
+</div>
+
+
+{% endblock %}

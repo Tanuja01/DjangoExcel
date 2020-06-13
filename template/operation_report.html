@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load utils %}
+{% load humanize %}
+
+{% block title %}
+	OPERATION REPORT
+{% endblock %}
+
+{% block content %}
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  	<script src="{% static 'js/blob' %}"></script>
+	<script src="{% static 'js/fileSaver.js' %}"></script>
+	
+    
+
+<script type="text/javascript">
+
+$(document).ready(function(){ 
+	$("#btnExport").click(function () {   
+	
+		var blob = new Blob([document.getElementById('table_data').innerHTML], {
+        		type: "application/vnd.ms-excel" });
+			saveAs(blob, "OperationReport.xls");
+
+	});		
+
+	});
+</script>
+
+<div class="container-fluid" style="padding-top: 1%">
+	<button class="btn btn-info" id="btnExport">
+          <span class="glyphicon glyphicon-export"></span> Export
+    </button>
+     <br>
+
+	<div style="padding-top: 1%" id='table_data'>
+
+	<table id="1" class="table-report" border="1">
+		<tr>
+			<td colspan="4" class="td-th"><b> BÁO CÁO VẬN HÀNH</b></td>
+
+		</tr>
+		<tr>
+			<td class="td-th"><b> THÔNG TIN CHUNG</b></td>
+		</tr>
+	</table>
+
+
+	<table border="1"  id="report" class="table-report">
+		<thead> 
+		 	<tr style="background-color:#ff8000;" class="td-th"> 
+		 		<th class="td-th">Chỉ tiêu</th> 
+		 		<th  class="td-th">Số tổ máy</th>
+		 		<th class="td-th">P<sub>lm</sub></th>
+		 		<th class="td-th">P<sub>min</sub></th>
+		 		<th class="td-th">E<sub>0</sub></th>
+		 		<th class="td-th">Giá HĐ</th> 
+		 	</tr> 
+		 	</thead> 
+		 	<tbody> 
+
+		 		<tr  style="background-color:#DCDCDC;" class="td-th">
+		 			<td class="unit  td-th"></td> 
+		 			<td class="unit td-th">(Tổ)</td> 
+		 			<td class="unit td-th">(MW)</td> 
+		 			<td class="unit td-th">(MW)</td> 
+		 			<td class="unit td-th">(10<sup>6</sup> kWh)</td> 
+		 			<td class="unit td-th">(đ/kWh)</td>
+		 		</tr>
+		 		<tr style="text-align: 	center" class="td-th">
+		 			<td class="td-th"> Giá trị </td>
+		 			<td class="td-th">{{operation.number_of_sets}}</td>
+		 			<td class="td-th">{{operation.plm}}</td>
+		 			<td class="td-th">{{operation.pmin}}</td>
+		 			<td class="td-th">{{operation.e}}</td>
+		 			<td class="td-th">{{operation.contract_price}}</td>
+
+		 		</tr>
+		 	</tbody>
+		 </table>
+
+	<table  id="2" class="table-report">
+		<tr>
+			<td class="td-th"><b>SẢN LƯỢNG NGÀY</b></td>
+		</tr>
+	</table>
+
+
+	<table border="1"  id="data" class="table-report"> 
+		<thead> 
+			<tr style="background-color:#ff8000;" class="td-th"> 
+				<th class="td-th" >Ngày/ Giờ</th> 
+				<th class="td-th">Sản lượng giao</th> 
+				<th class="td-th">Sản lượng nhận</th> 
+				<th class="td-th">Thời gian chạy máy</th> 
+				<th class="td-th">Giá biên hệ thống</th> 
+				<th class="td-th">Giá CAN</th>
+				<th>Doanh thu dự kiến</th> 
+				<th colspan="2">Tình hình vận hành</th>
+				<th rowspan="2"> Trưởng ca </th>
+			</tr>
+			<tr>
+				<th class="unit td-th"  style="background-color:#DCDCDC;"></th> 
+				<th class="unit td-th"  style="background-color:#DCDCDC;">(MWh)</th> 
+				<th  class="unit td-th"  style="background-color:#DCDCDC;">(MWh)</th> 
+				<th class="unit td-th"  style="background-color:#DCDCDC;">(giờ)</th> 
+				<th class="unit td-th"  style="background-color:#DCDCDC;">(đ/kWh)</th> 
+				<th class="unit td-th"  style="background-color:#DCDCDC;">(đ/kWh)</th>
+				<th class="unit td-th"  style="background-color:#DCDCDC;">(tr.đồng)</th>
+				<th class="td-th" style="background-color:#ff8000;">Sự cố</th>
+				<th class="td-th" style="background-color:#ff8000;">Sự kiện bất thường</th>
+				
+			</tr> 
+		</thead> 
+		<tbody> 
+			{% for row in operation_data %}
+				<tr class="td-th">
+				{% for key,value in row.items %}
+					
+						{% if key == 'date_time' %}
+							
+							{% if value|date:"SHORT_DATE_FORMAT" == ''  and value|date:"H:i" == '' %}
+							<td class=" td-th" style="background-color: #32CD32;">
+								{{value}}
+
+							{% elif value|date:"SHORT_DATE_FORMAT" == '' %}
+							<td class="td-th" >
+								{{value|date:"H:i"}}
+							{% else %}
+							<td class="td-th" >
+								{{value|date:"SHORT_DATE_FORMAT"}} 
+							{% endif %}
+
+						{% elif value|get_type == 'int' or value|get_type == 'float' %}
+							<td class="number_align ">
+							{{value|floatformat:1|intcomma}}
+						{% else %}
+							<td class="number_align">
+							{{value}}
+						{% endif %}
+					</td>
+						{% endfor %}
+				</tr>
+			{% endfor %}
+			
+		</tbody>
+	</table>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load utils %}
+{% load humanize %}
+{% block title %} Factory Revenue {% endblock %}
+
+{% block content %}
+
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  	<script src="{% static 'js/blob' %}"></script>
+	<script src="{% static 'js/fileSaver.js' %}"></script>
+	
+    
+
+<script type="text/javascript">
+
+$(document).ready(function(){ 
+	$("#btnExport").click(function () {   
+	
+		var blob = new Blob([document.getElementById('table_data').innerHTML], {
+        		type: "application/vnd.ms-excel" });
+			saveAs(blob, "FactoryRevenue.xls");
+
+	});		
+
+});
+
+</script>
+
+<div class="container-fluid" style="padding-top: 1%">
+	<button class="btn btn-info" id="btnExport">
+          <span class="glyphicon glyphicon-export"></span> Export
+    </button>
+     <br>
+
+	<div style="padding-top: 1%" id='table_data'>
+		<table id="1" border="1"  class="table-report">
+			<tr>
+				<td class="td-th">{{factory.company_name|capfirst}}</td>
+		
+			</tr>
+			
+			<tr>
+				<td class="td-th">{{factory.factory_name|capfirst}}</td>
+			</tr>
+
+			<tr>
+					<td  colspan="5" class="td-th">BÁO CÁO SẢN LƯỢNG, DOANH THU</td>
+
+			</tr>
+			<tr>
+		
+				<td class="td-th">BÁO CÁO NGÀY</td>
+				<td class="date td-th" colspan="4"> {{factory.report_date}}</td>
+			</tr>
+			
+
+
+		</table>
+
+		<table border="1"  id="report" class="table-report">
+		 	<thead > 
+		 		<tr style="background-color:#ff8000;"> 
+		 			<th rowspan="2" class="td-th">NHÀ MÁY</th> 
+		 			<th colspan="2" class="td-th">THỦY VĂN</th>
+		 			<th colspan="2" class="td-th">SẢN LƯỢNG</th>
+		 			<th rowspan="2" class="td-th">DOANH THU</th>
+		 			<th rowspan="2" class="td-th">THỜI GIAN CHẠY MÁY</th>
+		 			<th  rowspan="2" class="td-th">CS TRUNG BÌNH</th> 
+		 		</tr> 
+		 		<tr style="background-color:#ff8000;">
+		 		 	<th class="td-th" >MNTL</th>
+		 		 	 <th class="td-th">Q về TB</th> 
+		 		 	 <th class="td-th" >Giao</th> 
+		 		 	 <th class="td-th">Nhận</th>
+		 		</tr>
+
+
+		 	</thead> 
+		 	<tbody> 
+
+		 		<tr style="background-color:#DCDCDC;">
+		 			<td class="unit td-th" >NaN</td> 
+		 			<td class="unit td-th">(m)</td> 
+		 			<td class="unit td-th">(m3/s)</td> 
+		 			<td class="unit td-th">(MWh)</td> 
+		 			<td class="unit td-th">(MWh)</td> 
+		 			<td class="unit td-th">(tr.đồng)</td>
+		 			<td class="unit td-th">(giờ)</td>
+		 			<td class="unit td-th">(MW)</td>
+		 		</tr>
+		 		<tr class="number_align" > 
+		 			<td class="td-th">{{factory.factory_short_name|capfirst}}</td> 
+		 			<td class="td-th">{{factory.mn_tl|floatformat:1|intcomma}}</td> 
+		 			<td class="td-th">{{factory.q_tb|floatformat:1|intcomma}}</td> 
+		 			<td class="td-th">{{factory.product_delivered|floatformat:1|intcomma}}</td> 
+		 			<td class="td-th">{{factory.product_received|floatformat:1|intcomma}}</td> 
+		 			<td class="td-th">{{factory.revenue|floatformat:1|intcomma}}</td>
+		 			<td class="td-th">{{factory.working_time|floatformat:1|intcomma}}</td>
+		 			<td class="td-th">{{factory.cs_tb|floatformat:1|intcomma}}</td>
+		 		</tr>
+
+			</tbody>
+	</table>
+
+	<table id="3" class="table-report">
+		<tr>
+			<td class="td-th">LŨY KẾ</td>
+		</tr>
+	</table>
+	
+	<table border="1"  id="data" class="table-report"> 
+		<thead > 
+			<tr style="background-color:#ff8000;"> 
+				<th rowspan="2" class="td-th">Tháng</th> 
+				<th rowspan="2" class="td-th">MNĐK</th> 
+				<th rowspan="2" class="td-th">Q về TB</th> 
+				<th colspan="3" class="td-th">SẢN LƯỢNG GIAO</th> 
+				<th colspan="3" class="td-th">DOANH THU</th> 
+				<th rowspan="2" class="td-th">SẢN LƯỢNG NHẬN</th>
+				<th rowspan="2" class="td-th">THỜI GIAN CHẠY MÁY</th> 
+			</tr>
+			<tr style="background-color:#ff8000;">
+				<th class="td-th">KẾ HOẠCH</th> 
+				<th class="td-th">THỰC HIỆN</th> 
+				<th class="td-th">Tỷ lệ</th> 
+				<th class="td-th">KẾ HOẠCH</th> 
+				<th class="td-th">THỰC HIỆN</th> 
+				<th class="td-th">Tỷ lệ</th>
+			</tr> 
+		</thead> 
+		<tbody> 
+			<tr style="background-color:#DCDCDC;"> 
+				<td class="unit td-th"></td> 
+				<td class="unit td-th">(m)</td>
+				<td class="unit td-th">(m3/s)</td> 
+				<td class="unit td-th">(MWh)</td> 
+				<td class="unit td-th">(MWh)</td> 
+				<td class="unit td-th">(%)</td>
+				<td class="unit td-th">(tr.đồng)</td>
+				<td class="unit td-th">(tr.đồng)</td>
+				<td class="unit td-th">(%)</td>
+				<td class="unit td-th">(MWh)</td> 
+				<td class="unit td-th">(giờ)</td> 
+			</tr>
+			{% for mon in month_data %}
+			<tr>
+				{% for key, value in mon.items %}
+				<td class=" number_align">
+					{% if key == 'revenue_plan' %}
+						{{value|floatformat:0|intcomma}}
+					{% elif value|get_type == 'int' or value|get_type == 'float' %}
+						{{value|floatformat:1|intcomma}}
+					{% else %}
+						
+						{{value}}
+
+					{% endif %}
+				</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+			<tr style="background-color:#32CD32">
+				{% for key, value in summary_row.items %}
+				<td class="summary number_align">
+					{% if key == 'revenue_plan' %}
+						{{value|floatformat:0|intcomma}}
+					{% elif value|get_type == 'int' or value|get_type == 'float' %}
+						{{value|floatformat:1|intcomma}}
+					{% else %}
+						
+						{{value}}
+
+					{% endif %}
+				
+				</td>
+			{% endfor %}
+			</tr>	
+		</tbody>
+	</table>
+</div>
+</div>
+
+
+{% endblock %}

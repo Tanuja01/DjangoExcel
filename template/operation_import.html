@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} Operation Import {% endblock %}
+{% load utils %}
+{% block content %}
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+
+
+
+<form method="post" enctype='multipart/form-data'>
+	{% csrf_token %}
+	<div class="form-row" >
+    <div class="form-group col-md-3">
+      <label for="id_kvgs">id kvgs</label>
+      <input type='text' class="form-control" name="kvgs_id" />
+    </div>
+
+    <div class="form-group col-md-3">
+      <label for="fromDate">From Date</label>
+      <input type='date' class="form-control" name="from_date" required/>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="toDate">To Date</label>
+       <input type='date' class="form-control" id="inputCity" name='to_date' required>
+      
+    </div>
+    <div class="form-group col-md-3">
+      <label for="inputZip">Upload Excel</label>
+      <input type="file" class="form-control" name="excel" id="excel" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required="">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-info">Submit</button>
+  {{message}}
+
+ </form>
+
+ {% endblock %}

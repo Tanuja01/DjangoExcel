@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load utils %}
+{% load humanize %}
+
+{% block title %}
+	Summary Report
+{% endblock %}
+
+{% block content %}
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  	<script src="{% static 'js/blob' %}"></script>
+	<script src="{% static 'js/fileSaver.js' %}"></script>
+	
+    
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){ 
+	var addSerialNumber = function(){
+		var i=1;
+		 $('#report tbody tr').each(function(index) {
+        		if (!$(this).find('td:nth-child(1)').attr('colspan')){
+        			current_td=$(this).find('td:nth-child(1)');
+        			next_td=current_td.closest('td').next();
+        			if (next_td.text().trim()!='Cộng/Total' && next_td.text()[0]!='-' ){
+        				
+        				console.log(current_td.closest('td').next().text());
+        				$(this).find('td:nth-child(1)').html(i);
+        				i=i+1
+        			}
+        		}
+    });
+	};
+	addSerialNumber();
+
+	$("#btnExport").click(function () {   
+	
+		var blob = new Blob([document.getElementById('table_data').innerHTML], {
+        		type: "application/vnd.ms-excel" });
+			saveAs(blob, "SummaryReport.xls");
+
+	});		
+
+
+	});
+</script>
+
+
+</style>
+
+<div class="container-fluid" style="padding-top: 1%">
+	<button class="btn btn-info" id="btnExport">
+          <span class="glyphicon glyphicon-export"></em></span> Export
+    </button>
+     <br>
+
+     <div style= "padding-top: 1%" id='table_data' class="table-wrapper">
+
+     <table id="1" class="table-report" border="1">
+     	<tr> 
+     			<td colspan="3" class="td-th">Ngày báo cáo</td>
+     			<td colspan="5" class="td-th">Report date: {{report_date}}</td>
+
+     	</tr>
+     	<tr>
+     			<td colspan="5" class="td-th">I. Báo cáo sản lượng hàng ngày/Daily production </td>
+
+     	</tr>
+    </table>
+
+    <table id="report" border="1" class="table-report">
+    	<thead> 
+		 	<tr > 
+		 		<th rowspan="3" class="td-th">TT  <span style="color:red"><em>No</em></span></th> 
+		 		<th rowspan="3" class="td-th" >Nhà máy <span style="color:red"><em>Power Plant</em></span></th>
+		 		<th rowspan="2" colspan="2" style="background-color: #FFB6C1" class="td-th">Thủy văn ngày</th>
+		 		<th rowspan="2" class="td-th" colspan="3" style="background-color: #B0E0E6">Ngày /<span style="color:red"><em> Daily</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 1 / <span style="color:red"><em>January</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 2 / <span style="color:red"><em>February</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 3 / <span style="color:red"><em>March</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 4 / <span style="color:red"><em>April</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 5 / <span style="color:red"><em>May</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th"> Tháng 6 / <span style="color:red"><em>June</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 7 / <span style="color:red"><em>July</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 8 / <span style="color:red"><em>August</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 9 / <span style="color:red"><em>September</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 10 / <span style="color:red"><em>October</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 11 / <span style="color:red"><em>November</em></span></th>
+		 		<th colspan="6" style="background-color: #F4A460" class="td-th">Tháng 12 / <span style="color:red"><em>December</em></span></th>
+		 		<th colspan="6" style="background-color: #B0E0E6" class="td-th">Năm / <span style="color:red"><em>Year</em></span></th>
+		 	</tr>
+		 	<tr>
+		 		{% for i in 12|times %}
+		 		<th colspan="3" style="background-color: #F4A460" class="td-th">Sản lượng / <span style="color:red"><em>Quantity</em></span> </th>
+		 		<th colspan="3" style="background-color: #F4A460" class="td-th">Doanh thu / <span style="color:red"><em>Revenue	</em></span> </th> 
+		 		{% endfor %}
+		 		<th colspan="2" style="background-color: #B0E0E6" class="td-th">Sản lượng / <span style="color:red"><em>Quantity</em></span> </th>
+		 		<th colspan="2" style="background-color: #B0E0E6" class="td-th">Doanh thu / <span style="color:red"><em>Revenue	</em></span> </th> 
+		 		<th colspan="2" style="background-color: #B0E0E6" class="td-th">Tỷ lệ / <span style="color:red"><em>Rate	</em></span> </th> 
+		 	</tr> 
+		 	<tr>
+		 		<th style="background-color: #FFB6C1" class="td-th">MN lúc <span style="color:red"><em>Elevation at 24h(m)	</em></span> </th>
+		 		<th style="background-color: #FFB6C1" class="td-th">LL về hồ TB ngày <span style="color:red"><em>The average daily flow to the lake(m<sub>3</sub>/s)	</em></span> </th>
+		 		<th style="background-color: #B0E0E6" class="td-th">Sản lượng ngày báo cáo /  <span style="color:red"><em>Power Generation on (Mwh)</em></span> </th>
+		 		<th style="background-color: #B0E0E6" class="td-th">Doanh thu ngày báo cáo /  <span style="color:red"><em>Revenue Generation (tr.đồng)	</em></span> </th>
+		 		<th style="background-color: #B0E0E6" class="td-th">Công suất TB ngày báo cáo / <span style="color:red"><em>Average Power (MW)</em></span> </th>
+		 		{% for i in 24|times %}
+		 		<th style="background-color: #F4A460" class="td-th">Kế hoạch / <span style="color:red"><em>Plan (Mwh)</em></span> </th>
+		 		<th style="background-color: #F4A460" class="td-th">Thực hiện / <span style="color:red"><em>Actual (Mwh)</em></span> </th> 
+
+				<th style="background-color: #F4A460" class="td-th">Tỷ lệ HT KH / <span style="color:red"><em>Performace rate of plan(%)</em></span> </th>
+
+				{% endfor %}
+				<th  style="background-color: #B0E0E6" class="td-th" >Sản lượng KH năm 2020/ <span style="color:red"><em>Annual production plan (MWh)</em></span> </th>
+				<th  style="background-color: #B0E0E6" class="td-th">Sản lượng lũy kế năm 2020 / <span style="color:red"><em>Accumulated production of 2019(MWh)</em></span></th>
+				<th  style="background-color: #B0E0E6" class="td-th">Doanh thu KH năm 2020 / <span style="color:red"><em>Revenue plan (MWh)
+				</em></span></th>
+				<th  style="background-color: #B0E0E6" class="td-th"> Doanh thu lũy kế năm 2020 /  <span style="color:red"><em>Accumulated revenue of 2019(MWh)</em></span></th>
+				<th  style="background-color: #B0E0E6" class="td-th"> Tỷ lệ HT KH SL 2020 / <span style="color:red"><em>Performance rate production (%) </em></span></th>
+				<th  style="background-color: #B0E0E6" class="td-th">Tỷ lệ HT KH DT 2020 / <span style="color:red"><em>Performance rate revenue (%)</em></span></th>
+
+			</tr>
+
+		 	</thead> 
+		 	<tbody> 
+		 		
+
+		 	{% for group in complete_summary.group_summary %}
+		 	
+		 		<tr><td style="text-align: left" colspan="85"; class="td-th">{{group.plants_group.0.group_id}}
+		 			{{group.plants_group.0.group_name}}
+		 		</td></tr>
+		 			{% for summary in  group.plants_group %}
+		 		
+		 			<tr>
+		 				
+		 				<td class="td-th"></td>
+		 				
+		 				
+		 				{{ block.super }}
+		 				<td class="td-th number_align"> {{summary.powerplant_name}}	</td>
+						<td class=" number_align" style="background-color:#FFB6C1" > {{summary.daily.elevation|floatformat:1|intcomma}}	</td>
+						<td style="background-color:#FFB6C1" class=" number_align"> {{summary.daily.average_daily_flow|floatformat:1|intcomma}}	</td>
+						<td style="background-color: #B0E0E6" class=" number_align"> {{summary.daily.daily_power_generation|floatformat:1|intcomma}}	</td>
+						<td style="background-color: #B0E0E6" class=" number_align"> {{summary.daily.daily_revenue_generation|floatformat:1|intcomma}}	</td>
+						<td style="background-color: #B0E0E6" class="number_align">  {{summary.daily.daily_avergate_power|floatformat:1|intcomma}}	</td>
+			
+						{% for month in summary.month %}
+			
+							<td style="background-color: #F4A460" class="number_align"> {{month.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+							<td style="background-color: #F4A460" class="number_align"> {{month.month_wise_quantity_actual|floatformat:1|intcomma}}</td>
+							<td style="background-color: #F4A460" class="number_align"> {{month.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+							<td style="background-color: #F4A460" class="number_align">{{month.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+							<td style="background-color: #F4A460" class="number_align">{{month.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+							<td style="background-color: #F4A460" class="number_align">{{month.month_wise_revenue_rate|floatformat:1|intcomma}}%</td>
+						{% endfor %}
+
+						<td style="background-color: #B0E0E6" class="number_align"> {{summary.year.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+						<td style="background-color: #B0E0E6" class="number_align"> {{summary.year.month_wise_quantity_actual|floatformat:1|intcomma}}</td>
+				
+						<td style="background-color: #B0E0E6" class="number_align">{{summary.year.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+						<td style="background-color: #B0E0E6" class="number_align">{{summary.year.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+						<td style="background-color: #B0E0E6" class="number_align"> {{summary.year.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+						<td style="background-color: #B0E0E6" class="number_align">{{summary.year.month_wise_revenue_rate|floatformat:1|intcomma}}%</td>
+					</tr>
+				{% endfor %}
+				<b>
+				<tr>
+				<td></td>
+		 	<td style="font-weight: bold" class="td-th"> {{group.plant_total.powerplant_name}}	</td>
+			<td style="font-weight: bold;background-color:#FFB6C1" class="number_align" > {{group.plant_total.daily.elevation|floatformat:1|intcomma}}	</td>
+			<td style="font-weight: bold;background-color:#FFB6C1" class="number_align"> {{group.plant_total.daily.average_daily_flow|floatformat:1|intcomma}}	</td>
+			<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.daily.daily_power_generation|floatformat:1|intcomma}}	</td>
+			<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.daily.daily_revenue_generation|floatformat:1|intcomma}}	</td>
+			<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.daily.daily_avergate_power|floatformat:1|intcomma}}	</td>
+			
+				{% for month in group.plant_total.month %}
+			
+				<td style="font-weight: bold;background-color: #F4A460 " class="number_align"> {{month.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #F4A460 " class="number_align"> {{month.month_wise_quantity_actua|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;;background-color: #F4A460" class="number_align"> {{month.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+				<td style="font-weight: bold;;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_rate|floatformat:1|intcomma}}%</td>
+				{% endfor %}
+
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.year.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.year.month_wise_quantity_actual|floatformat:1|intcomma}}</td>
+				
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{group.plant_total.year.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{group.plant_total.year.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{group.plant_total.year.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+				<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{group.plant_total.year.month_wise_revenue_rate|floatformat:1|intcomma}}%</td>
+
+
+			</tr>
+			 
+			{% endfor %}
+			
+					<tr><td style="text-align: left" colspan="85"; class="td-th">{{complete_summary.group_id}}
+		 			{{complete_summary.group_name}} 
+		 			</td></tr>
+					
+						<tr>
+		 				<td></td>
+		 				<td style="font-weight: bold" class="td-th"> {{complete_summary.plant_total.powerplant_name}}	</td>
+						<td style="font-weight: bold;background-color:#FFB6C1" class="number_align"> {{complete_summary.plant_total.daily.elevation|floatformat:1|intcomma}}	</td>
+						<td style="font-weight: bold;background-color:#FFB6C1" class="number_align"> {{complete_summary.plant_total.daily.average_daily_flow|floatformat:1|intcomma}}	</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.daily.daily_power_generation|floatformat:1|intcomma}}	</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.daily.daily_revenue_generation|floatformat:1|intcomma}}	</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.daily.daily_avergate_power|floatformat:1|intcomma}}	</td>
+			
+						{% for month in complete_summary.plant_total.month %}
+			
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align"> {{month.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align"> {{month.month_wise_quantity_actual|floatformat:1|intcomma}}</td>
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align"> {{month.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+							<td style="font-weight: bold;background-color: #F4A460 " class="number_align">{{month.month_wise_revenue_rate|floatformat:1|intcomma}}%</td>
+						{% endfor %}
+
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.year.month_wise_quantity_plan|floatformat:1|intcomma}}</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.year.month_wise_quantity_actual|floatformat:1|intcomma}}</td>
+				
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{complete_summary.plant_total.year.month_wise_revenue_plan|floatformat:1|intcomma}}</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{complete_summary.plant_total.year.month_wise_revenue_actual|floatformat:1|intcomma}}</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align"> {{complete_summary.plant_total.year.month_wise_quantity_rate|floatformat:1|intcomma}}%</td>
+						<td style="font-weight: bold;background-color: #B0E0E6" class="number_align">{{complete_summary.plant_total.year.month_wise_revenue_rate|floatformat:1|intcomma}}% </td>
+					</tr>
+		
+		 			
+		 			<tr >
+		 				<td colspan="84" class="td-th" style="text-align: left"><b> II. Công tác vận hành / Operation:</b> </td>
+		 			</tr>
+		 			<tr>
+		 				<td  colspan="10" class="td-th" style="text-align: left">1. Nhà máy không phát đủ 24h / Power plants cannot operate fully 24h/day</td>
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th"></td>
+		 				<td colspan="5" class="td-th" style="text-align: left">- Do sự cố/<span style="color:red"><em> due to incedents</em></span></td>
+		 				<td colspan="4" class="td-th" style="text-align: left"> {{complete_summary.due_to_incedents }} </td>	
+		 				<td class="td-th" colspan= "75" style="text-align: left"> Người lập/ Prepared by </td>
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th"></td>
+		 				<td colspan="5" class="td-th" style="text-align: left">-Do công việc khác</td>
+		 				<td colspan="4"  class="td-th" style="text-align: left"> {{complete_summary.due_to_other_jobs }} </td>	
+		 				<td class="td-th" colspan= "75" style="text-align: left"> {{complete_summary.prepared_by}} </td>
+		 				
+		 			</tr> 
+		 			<tr>
+		 				<td class="td-th"></td>
+		 				<td class="td-th" colspan="5" style="text-align: left">- Do phương thức vận hành (tích nước dự trữ)/<span style="color:red"><em> voluntee operation (reserve water)</em></span></td>
+		 				<td class="td-th" colspan="4" style="text-align: left">{{complete_summary.volunteer_operation}}</td>
+		 				<td class="td-th" colspan="75" ></td>
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th" colspan="10" style="text-align: left">2. Nhà máy phát không đạt công suất thiết kế dù đủ nước/ Power plants operate under install capacity even enough water</td>
+		 				<td class="td-th" colspan="75" ></td>
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th"></td>
+		 				<td colspan="5" style="text-align: left">- Do cột nước không đảm bảo/<span style="color:red"><em> low rated head (high evelvation at dowstream)</em></span></td>
+		 				<td class="td-th" colspan="4" style="text-align: left"> {{complete_summary.downstream_high_elevation }} </td>
+		 				<td class="td-th" colspan="75" ></td>	
+		 				
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th"></td>
+		 				<td class="td-th" colspan="5" style="text-align: left">- Do lệnh điều độ/ <span style="color:red"><em>(due to dispatch operations)</em></span></td>
+		 				<td class="td-th" colspan="4" style="text-align: left"> {{complete_summary.dispatch_operation }} </td>	
+		 				<td class="td-th" colspan="75" ></td>
+		 			</tr>
+		 			
+		 			<tr>
+		 				<td class="td-th" colspan="10" style="text-align: left">3. Nhà máy phát vượt công suất thiết kế hoặc xả nước/Power plants operate over installed capacity or spilling</td>
+		 				<td class="td-th" colspan="75" ></td>
+		 			</tr>
+		 			<tr>
+		 				<td class="td-th" ></td>
+		 				<td class="td-th" colspan="5" style="text-align: left">- Xả bắt buộc theo quy trình / <span style="color:red"><em>legal procedure water spilling </em></span></td>
+		 				<td class="td-th" colspan="4" style="text-align: left"> {{complete_summary.legal_procedure }} </td>	
+		 				<td class="td-th" colspan="75" ></td>
+		 				
+		 				
+		 			</tr>
+		 			
+
+
+		
+			</tbody>
+		 </table>
+		</div>
+	</div>
+
+
+{% endblock %}
+
